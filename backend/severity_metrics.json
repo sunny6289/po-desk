@@ -1,0 +1,114 @@
+[
+  {
+    "department_id": 101,
+    "department_name": "Notification Team",
+    "metrics": [
+      "Percentage of users affected by notification delivery failure",
+      "Latency between trigger event and notification receipt",
+      "Volume of critical alert notifications missed in the last hour",
+      "Rate of template rendering errors or broken content",
+      "Number of spam/complaint tickets triggered by recent campaigns",
+      "Scope of user segment impacted (e.g., global vs. regional)",
+      "Failure rate of SMS gateway vs. email gateway",
+      "Duration of notification service outage",
+      "Number of users unable to update notification preferences",
+      "Impact on customer retention due to missed alerts"
+    ]
+  },
+  {
+    "department_id": 102,
+    "department_name": "Data Team",
+    "metrics": [
+      "Deviation of data freshness from SLA (e.g., hours of lag)",
+      "Percentage of data records with quality issues (missing, corrupt)",
+      "Volume of data ingestion failures per hour",
+      "Duration of data pipeline downtime",
+      "Number of downstream analytics reports affected",
+      "Scope of data synchronization lag across systems",
+      "Severity of data inconsistency impacting business logic",
+      "Number of critical database queries failing",
+      "Impact on real-time decision-making dashboards",
+      "Recovery time objective (RTO) breach status"
+    ]
+  },
+  {
+    "department_id": 103,
+    "department_name": "Payment Team",
+    "metrics": [
+      "Transaction failure rate (percentage of failed payments)",
+      "Total revenue loss due to payment processing errors",
+      "Number of pending refunds exceeding 24 hours",
+      "Volume of customer complaints regarding payment failures",
+      "Duration of payment gateway outage",
+      "Number of transactions stuck in 'pending' state",
+      "Impact on order fulfillment due to payment holds",
+      "Frequency of invoice generation errors",
+      "Number of chargebacks or disputed transactions",
+      "Scope of payment method availability affected (e.g., all cards vs. specific)"
+    ]
+  },
+  {
+    "department_id": 104,
+    "department_name": "User Management Team",
+    "metrics": [
+      "Number of users unable to log in",
+      "Percentage of users locked out due to security policies",
+      "Average time to resolve password reset requests",
+      "Volume of account creation failures",
+      "Number of users with incorrect access permissions",
+      "Duration of identity provider (IdP) downtime",
+      "Impact on user retention due to account access issues",
+      "Number of duplicate account issues reported",
+      "Scope of users affected by profile update failures",
+      "Severity of data breach or unauthorized access incidents"
+    ]
+  },
+  {
+    "department_id": 105,
+    "department_name": "Order Management Team",
+    "metrics": [
+      "Order creation failure rate",
+      "Number of orders stuck in 'processing' or 'pending' state",
+      "Duration of order status update delays",
+      "Volume of customer complaints about order tracking",
+      "Total revenue impact due to order processing failures",
+      "Number of orders incorrectly cancelled or duplicated",
+      "Impact on inventory allocation due to order lag",
+      "Frequency of order history data inconsistencies",
+      "Scope of order lifecycle stage affected (e.g., checkout vs. shipping)",
+      "Recovery time for order management system outages"
+    ]
+  },
+  {
+    "department_id": 106,
+    "department_name": "Product Team",
+    "metrics": [
+      "Number of products with incorrect pricing displayed",
+      "Frequency of product availability status errors (e.g., in-stock vs. out)",
+      "Volume of customer complaints about product information accuracy",
+      "Duration of product catalog synchronization failures",
+      "Impact on sales due to missing or incorrect product data",
+      "Number of products with incomplete or broken metadata",
+      "Scope of product catalog affected (e.g., entire category vs. specific items)",
+      "Frequency of product creation/update failures",
+      "Number of search results returning incorrect or no products",
+      "Recovery time for product data pipeline outages"
+    ]
+  },
+  {
+    "department_id": 107,
+    "department_name": "Infrastructure Team",
+    "metrics": [
+      "System uptime percentage during incident window",
+      "Number of services or applications affected by infrastructure outage",
+      "Duration of server or cloud resource unavailability",
+      "Volume of deployment failures impacting production",
+      "Network latency or packet loss severity",
+      "Impact on application response time (e.g., >5s delay)",
+      "Number of users unable to access the application",
+      "Severity of security incident (e.g., firewall breach, DDoS)",
+      "Frequency of monitoring alert triggers",
+      "Recovery time objective (RTO) and recovery point objective (RPO) breach status"
+    ]
+  }
+]

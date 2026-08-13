@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from agents.intake_agent import intake_agent
+from agents.prioritization_agent import prioritization_agent
 from agents.clarified_requestor_message_agent import (
     clarified_requestor_message_agent
 )
@@ -35,21 +36,16 @@ class ClarificationAnswer(BaseModel):
 
 class ClarificationRequest(BaseModel):
     answers: list[ClarificationAnswer]
-
     tracking_id: str
-
     department_name: str
     manager_name: str
     manager_email: str
-
+    clarified_requestor_message: str | None
     user_query: str
     message: str
-
     isRelatedQuery: bool
-
     need_clarification: bool
     clarifications_required: list[str] | None = None
-
     status: RequestStatus
 
 
@@ -81,25 +77,44 @@ def submit_clarifications(request: ClarificationRequest):
     # Get clarified requestor message
     # ============================================
 
-    clarified_requestor_message = (
+    clarified_message = (
         clarified_result.get("clarified_requestor_message")
     )
 
     # ============================================
-    # Print for debugging
+    # Print clarified requestor message
     # ============================================
 
     print("Clarified Requestor Message:")
-    print(clarified_requestor_message)
+    print(clarified_message)
+
+    # ============================================
+    # Call Prioritization Agent
+    # ============================================
+
+    prioritization_result = prioritization_agent(
+        requestor_message=clarified_message,
+        department_name=request.department_name
+    )
+
+    # ============================================
+    # Print prioritization result
+    # ============================================
+
+    print("Prioritization Result:")
+    print(prioritization_result)
+
+    
 
     # ============================================
     # Response
     # ============================================
 
     return {
-        "message": "Clarifications received successfully",
-        "tracking_id": request.tracking_id,
-        "answers": request.answers,
-        "clarified_requestor_message": clarified_requestor_message,
-        "status": request.status
+        "server_message": "Clarifications Sent and Approval Request Sent Successfully",
+        "department_name": request.department_name,
+        "manager_name": request.manager_name,
+        "manager_email": request.manager_email,
+        "status": "APPROVAL_PENDING",
+        "priority": prioritization_result["priority"]
     }

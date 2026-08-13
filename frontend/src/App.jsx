@@ -80,7 +80,7 @@ function App() {
               department_name: data.department_name,
               manager_name: data.manager_name,
               manager_email: data.manager_email,
-
+              clarified_requestor_message: data.clarified_requestor_message,
               user_query: data.user_query,
               message: data.server_message,
 
@@ -106,7 +106,7 @@ function App() {
         // ----------------------------------------
 
         const botText = `
-${data.message}
+${data.server_message}
 
 Department: ${data.department_name}
 Manager: ${data.manager_name}
@@ -207,7 +207,7 @@ Status: ${data.status}
     department_name: clarificationData.department_name,
     manager_name: clarificationData.manager_name,
     manager_email: clarificationData.manager_email,
-
+    clarified_requestor_message: clarificationData.clarified_requestor_message,
     user_query: clarificationData.user_query,
     message: clarificationData.message,
 
@@ -263,15 +263,21 @@ Status: ${data.status}
     // ==========================================
     // Success
     // ==========================================
+const botText = `
+${data.server_message}
 
+Department: ${data.department_name}
+Manager: ${data.manager_name}
+Manager Email: ${data.manager_email}
+Status: ${data.status},
+Priority: ${data.priority}
+        `.trim();
     setMessages((prev) => [
       ...prev,
       {
         id: Date.now(),
         sender: "bot",
-        text:
-          data.message ||
-          "Clarifications submitted successfully.",
+        text: botText,
       },
     ]);
 

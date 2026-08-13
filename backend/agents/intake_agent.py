@@ -216,7 +216,8 @@ Employee message:
         "department_name": selected_department["department_name"],
         "manager_name": selected_department["manager_name"],
         "manager_email": selected_department["manager_email"],
-        "server_message": "Request sent successfully",
+        "server_message": "Approval Request sent successfully",
+        "clarified_requestor_message": None,
         "user_query": message,
         "isRelatedQuery": True
     }
