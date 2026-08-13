@@ -3,7 +3,7 @@ import "./App.css";
 
 const API = {
   sendMessage: "http://localhost:8000/api/chat/send",
-  getMessages: "http://localhost:8080/api/chat/messages",
+  submitClarification: "http://localhost:8000/api/chat/clarification",
 };
 
 function App() {
@@ -18,10 +18,23 @@ function App() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // ==========================================
+  // Clarification state
+  // ==========================================
+
+  const [clarificationData, setClarificationData] = useState(null);
+  const [clarificationAnswers, setClarificationAnswers] = useState({});
+  const [clarificationLoading, setClarificationLoading] = useState(false);
+
+  // ==========================================
+  // Send initial message
+  // ==========================================
+
   const sendMessage = async () => {
     const text = input.trim();
 
-    if (!text || loading) return;
+    // Do not allow a new query while clarification is pending
+    if (!text || loading || clarificationData !== null) return;
 
     const userMessage = {
       id: Date.now(),
@@ -34,51 +47,97 @@ function App() {
     setLoading(true);
 
     try {
+      const requestData = {
+        employee_id: 2436587,
+        employee_email: "sunny@company.com",
+        created_at: new Date().toISOString(),
+        message: text,
+      };
+
       const response = await fetch(API.sendMessage, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          message: text,
-        }),
+        body: JSON.stringify(requestData),
       });
 
       const data = await response.json();
 
       // ==========================================
-      // Successful request
+      // Required query
       // ==========================================
 
-      let botText;
+      if (data.isRelatedQuery === true) {
+        // ----------------------------------------
+        // Clarification required
+        // ----------------------------------------
 
-      if (data.isSuccessful === true) {
-        botText = `
+        if (data.need_clarification === true) {
+            setClarificationData({
+              status: data.status,
+              tracking_id: data.tracking_id,
+              department_name: data.department_name,
+              manager_name: data.manager_name,
+              manager_email: data.manager_email,
+
+              user_query: data.user_query,
+              message: data.server_message,
+
+              isRelatedQuery: data.isRelatedQuery,
+              need_clarification: data.need_clarification,
+
+              clarifications_required: data.clarifications_required || [],
+            });
+
+          const initialAnswers = {};
+
+          data.clarifications_required?.forEach((_, index) => {
+            initialAnswers[index] = "";
+          });
+
+          setClarificationAnswers(initialAnswers);
+
+          return;
+        }
+
+        // ----------------------------------------
+        // No clarification required
+        // ----------------------------------------
+
+        const botText = `
 ${data.message}
 
 Department: ${data.department_name}
 Manager: ${data.manager_name}
 Manager Email: ${data.manager_email}
+Status: ${data.status}
         `.trim();
+
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: Date.now() + 1,
+            sender: "bot",
+            text: botText,
+          },
+        ]);
       }
 
       // ==========================================
-      // Unsuccessful request
+      // Not a required query
       // ==========================================
 
       else {
-        botText = data.message;
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: Date.now() + 1,
+            sender: "bot",
+            text: data.message,
+          },
+        ]);
       }
-
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: Date.now() + 1,
-          sender: "bot",
-          text: botText,
-        },
-      ]);
-
     } catch (error) {
       console.error("Failed to send message:", error);
 
@@ -95,8 +154,163 @@ Manager Email: ${data.manager_email}
     }
   };
 
+  // ==========================================
+  // Handle clarification answer
+  // ==========================================
+
+  const handleClarificationChange = (index, value) => {
+    setClarificationAnswers((prev) => ({
+      ...prev,
+      [index]: value,
+    }));
+  };
+
+  // ==========================================
+  // Check whether all answers are filled
+  // ==========================================
+
+  const areAllClarificationsAnswered = () => {
+    if (!clarificationData) return false;
+
+    return clarificationData.clarifications_required.every(
+      (_, index) =>
+        clarificationAnswers[index]?.trim().length > 0
+    );
+  };
+
+  // ==========================================
+  // Submit clarifications
+  // ==========================================
+
+  const submitClarifications = async () => {
+  if (
+    !clarificationData ||
+    !areAllClarificationsAnswered() ||
+    clarificationLoading
+  ) {
+    return;
+  }
+
+  const answers =
+    clarificationData.clarifications_required.map(
+      (question, index) => ({
+        question,
+        answer: clarificationAnswers[index].trim(),
+      })
+    );
+
+  const requestData = {
+    answers,
+
+    tracking_id: clarificationData.tracking_id,
+
+    department_name: clarificationData.department_name,
+    manager_name: clarificationData.manager_name,
+    manager_email: clarificationData.manager_email,
+
+    user_query: clarificationData.user_query,
+    message: clarificationData.message,
+
+    isRelatedQuery: clarificationData.isRelatedQuery,
+
+    need_clarification:
+      clarificationData.need_clarification,
+
+    clarifications_required:
+      clarificationData.clarifications_required,
+
+    status: clarificationData.status,
+  };
+
+  console.log(
+    "Sending clarification request:",
+    requestData
+  );
+
+  setClarificationLoading(true);
+
+  try {
+    const response = await fetch(
+      API.submitClarification,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      }
+    );
+
+    const data = await response.json();
+
+    console.log(
+      "Clarification API response:",
+      data
+    );
+
+    if (!response.ok) {
+      console.error(
+        "Clarification API error:",
+        data
+      );
+
+      throw new Error(
+        data.detail ||
+          "Failed to submit clarifications"
+      );
+    }
+
+    // ==========================================
+    // Success
+    // ==========================================
+
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        sender: "bot",
+        text:
+          data.message ||
+          "Clarifications submitted successfully.",
+      },
+    ]);
+
+    // ==========================================
+    // Enable new queries again
+    // ==========================================
+
+    setClarificationData(null);
+    setClarificationAnswers({});
+  } catch (error) {
+    console.error(
+      "Failed to submit clarifications:",
+      error
+    );
+
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        sender: "bot",
+        text:
+          "Unable to submit clarifications. Please try again.",
+      },
+    ]);
+  } finally {
+    setClarificationLoading(false);
+  }
+};
+
+  // ==========================================
+  // Keyboard handler
+  // ==========================================
+
   const handleKeyDown = (event) => {
-    if (event.key === "Enter" && !event.shiftKey) {
+    if (
+      event.key === "Enter" &&
+      !event.shiftKey &&
+      clarificationData === null
+    ) {
       event.preventDefault();
       sendMessage();
     }
@@ -104,6 +318,11 @@ Manager Email: ${data.manager_email}
 
   return (
     <div className="app">
+
+      {/* ======================================
+          Header
+      ====================================== */}
+
       <header className="header">
         <div className="logo">PO Desk</div>
 
@@ -113,17 +332,27 @@ Manager Email: ${data.manager_email}
         </div>
       </header>
 
+      {/* ======================================
+          Chat
+      ====================================== */}
+
       <main className="chat-container">
+
         <div className="messages">
+
           {messages.map((message) => (
             <div
               key={message.id}
               className={`message-row ${
-                message.sender === "user" ? "user-row" : "bot-row"
+                message.sender === "user"
+                  ? "user-row"
+                  : "bot-row"
               }`}
             >
               {message.sender === "bot" && (
-                <div className="avatar bot-avatar">AI</div>
+                <div className="avatar bot-avatar">
+                  AI
+                </div>
               )}
 
               <div
@@ -137,47 +366,159 @@ Manager Email: ${data.manager_email}
               </div>
 
               {message.sender === "user" && (
-                <div className="avatar user-avatar">You</div>
+                <div className="avatar user-avatar">
+                  You
+                </div>
               )}
             </div>
           ))}
 
+          {/* ==================================
+              Clarification UI
+          ================================== */}
+
+          {clarificationData && (
+            <div className="message-row bot-row">
+
+              <div className="avatar bot-avatar">
+                AI
+              </div>
+
+              <div className="message bot-message clarification-box">
+
+                <div className="clarification-status">
+                  Status: {clarificationData.status}
+                </div>
+
+                <div className="clarification-title">
+                  Additional information is required:
+                </div>
+
+                {clarificationData.clarifications_required.map(
+                  (question, index) => (
+                    <div
+                      className="clarification-question"
+                      key={index}
+                    >
+                      <label>
+                        {question}
+                      </label>
+
+                      <input
+                        type="text"
+                        value={
+                          clarificationAnswers[index] || ""
+                        }
+                        onChange={(e) =>
+                          handleClarificationChange(
+                            index,
+                            e.target.value
+                          )
+                        }
+                        placeholder="Enter your answer..."
+                        disabled={clarificationLoading}
+                      />
+                    </div>
+                  )
+                )}
+
+                <button
+                  className="clarification-submit"
+                  onClick={submitClarifications}
+                  disabled={
+                    !areAllClarificationsAnswered() ||
+                    clarificationLoading
+                  }
+                >
+                  {clarificationLoading
+                    ? "Submitting..."
+                    : "Submit Clarifications"}
+                </button>
+
+              </div>
+
+            </div>
+          )}
+
+          {/* ==================================
+              Loading
+          ================================== */}
+
           {loading && (
             <div className="message-row bot-row">
-              <div className="avatar bot-avatar">AI</div>
+
+              <div className="avatar bot-avatar">
+                AI
+              </div>
 
               <div className="message bot-message typing">
                 <span></span>
                 <span></span>
                 <span></span>
               </div>
+
             </div>
           )}
+
         </div>
 
+        {/* ====================================
+            Input
+        ==================================== */}
+
         <div className="input-area">
+
           <div className="input-wrapper">
+
             <textarea
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={(e) =>
+                setInput(e.target.value)
+              }
               onKeyDown={handleKeyDown}
-              placeholder="Message PO Desk..."
+              placeholder={
+                clarificationData
+                  ? "Please answer the required clarifications above..."
+                  : "Message PO Desk..."
+              }
               rows={1}
+
+              // ==================================
+              // IMPORTANT:
+              // Disable new queries while
+              // clarification is pending
+              // ==================================
+
+              disabled={
+                clarificationData !== null ||
+                loading ||
+                clarificationLoading
+              }
             />
 
             <button
               className="send-button"
               onClick={sendMessage}
-              disabled={!input.trim() || loading}
+              disabled={
+                !input.trim() ||
+                loading ||
+                clarificationData !== null ||
+                clarificationLoading
+              }
             >
               ↑
             </button>
+
           </div>
 
           <p className="input-hint">
-            Press Enter to send · Shift + Enter for a new line
+            {clarificationData
+              ? "Please submit the requested clarifications before sending a new query."
+              : "Press Enter to send · Shift + Enter for a new line"}
           </p>
+
         </div>
+
       </main>
     </div>
   );

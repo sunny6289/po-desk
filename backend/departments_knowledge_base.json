@@ -1,59 +1,80 @@
 {
   "departments": [
     {
+      "department_id": 101,
       "department_name": "Notification Team",
       "department_description": "Handles email notifications, SMS notifications, push notifications, notification templates, delivery failures, and notification preferences.",
       "manager_name": "Rahul Sharma",
+      "manager_employee_id": 583214,
       "manager_email": "rahul.sharma@company.com",
       "senior_manager_name": "Priya Mehta",
+      "senior_manager_employee_id": 741926,
       "senior_manager_email": "priya.mehta@company.com"
     },
     {
+      "department_id": 102,
       "department_name": "Data Team",
       "department_description": "Handles data pipelines, data processing, data quality, data ingestion, analytics data, database-related data issues, and data synchronization.",
       "manager_name": "Amit Verma",
+      "manager_employee_id": 392847,
       "manager_email": "amit.verma@company.com",
       "senior_manager_name": "Neha Kapoor",
+      "senior_manager_employee_id": 615384,
       "senior_manager_email": "neha.kapoor@company.com"
     },
     {
+      "department_id": 103,
       "department_name": "Payment Team",
       "department_description": "Handles payment processing, payment failures, refunds, transaction issues, payment gateways, invoices, and payment-related integrations.",
       "manager_name": "Rohan Gupta",
+      "manager_employee_id": 472951,
       "manager_email": "rohan.gupta@company.com",
       "senior_manager_name": "Ankit Malhotra",
+      "senior_manager_employee_id": 829463,
       "senior_manager_email": "ankit.malhotra@company.com"
     },
     {
+      "department_id": 104,
       "department_name": "User Management Team",
       "department_description": "Handles user accounts, user registration, login issues, profile management, account permissions, password resets, and user-related access problems.",
       "manager_name": "Sneha Singh",
+      "manager_employee_id": 316728,
       "manager_email": "sneha.singh@company.com",
       "senior_manager_name": "Vikram Joshi",
+      "senior_manager_employee_id": 954217,
       "senior_manager_email": "vikram.joshi@company.com"
     },
     {
+      "department_id": 105,
       "department_name": "Order Management Team",
       "department_description": "Handles order creation, order processing, order status, order cancellation, order updates, order history, and issues related to the order lifecycle.",
       "manager_name": "Karan Mehta",
+      "manager_employee_id": 628419,
       "manager_email": "karan.mehta@company.com",
       "senior_manager_name": "Pooja Agarwal",
+      "senior_manager_employee_id": 483726,
       "senior_manager_email": "pooja.agarwal@company.com"
     },
     {
+      "department_id": 106,
       "department_name": "Product Team",
       "department_description": "Handles product information, product creation and updates, product availability, pricing, product catalog, product metadata, and product-related issues.",
       "manager_name": "Arjun Nair",
+      "manager_employee_id": 572831,
       "manager_email": "arjun.nair@company.com",
       "senior_manager_name": "Meera Iyer",
+      "senior_manager_employee_id": 839215,
       "senior_manager_email": "meera.iyer@company.com"
     },
     {
+      "department_id": 107,
       "department_name": "Infrastructure Team",
       "department_description": "Handles servers, cloud infrastructure, deployments, application availability, networking, monitoring, system outages, and infrastructure-related incidents.",
       "manager_name": "Siddharth Roy",
+      "manager_employee_id": 694328,
       "manager_email": "siddharth.roy@company.com",
       "senior_manager_name": "Rajiv Khanna",
+      "senior_manager_employee_id": 217956,
       "senior_manager_email": "rajiv.khanna@company.com"
     }
   ]
