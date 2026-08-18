@@ -1,10 +1,14 @@
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
+
 import "./App.css";
 
 const API = {
   sendMessage: "http://localhost:8000/api/chat/send",
   submitClarification: "http://localhost:8000/api/chat/clarification",
 };
+
+const REQUESTOR_EMPLOYEE_ID= 2436587;
 
 function App() {
   const [messages, setMessages] = useState([
@@ -48,8 +52,8 @@ function App() {
 
     try {
       const requestData = {
-        employee_id: 2436587,
-        employee_email: "sunny@company.com",
+        employee_id: REQUESTOR_EMPLOYEE_ID,
+        employee_email: "sunnymishra9007689708@gmail.com",
         created_at: new Date().toISOString(),
         message: text,
       };
@@ -83,7 +87,7 @@ function App() {
               clarified_requestor_message: data.clarified_requestor_message,
               user_query: data.user_query,
               message: data.server_message,
-
+              employee_email: data.employee_email,
               isRelatedQuery: data.isRelatedQuery,
               need_clarification: data.need_clarification,
 
@@ -108,10 +112,12 @@ function App() {
         const botText = `
 ${data.server_message}
 
+Request ID: ${data.tracking_id}
 Department: ${data.department_name}
-Manager: ${data.manager_name}
+Manager (Approver): ${data.manager_name}
 Manager Email: ${data.manager_email}
 Status: ${data.status}
+Priority: ${data.priority}
         `.trim();
 
         setMessages((prev) => [
@@ -203,7 +209,7 @@ Status: ${data.status}
     answers,
 
     tracking_id: clarificationData.tracking_id,
-
+    employee_email: clarificationData.employee_email,
     department_name: clarificationData.department_name,
     manager_name: clarificationData.manager_name,
     manager_email: clarificationData.manager_email,
@@ -266,12 +272,13 @@ Status: ${data.status}
 const botText = `
 ${data.server_message}
 
+Request ID: ${data.tracking_id}
 Department: ${data.department_name}
-Manager: ${data.manager_name}
+Manager (Approver): ${data.manager_name}
 Manager Email: ${data.manager_email}
-Status: ${data.status},
+Status: ${data.status}
 Priority: ${data.priority}
-        `.trim();
+`.trim();
     setMessages((prev) => [
       ...prev,
       {
@@ -330,12 +337,38 @@ Priority: ${data.priority}
       ====================================== */}
 
       <header className="header">
-        <div className="logo">PO Desk</div>
+
+        <div className="logo">
+          PO Desk
+        </div>
+
+        <nav className="nav-links">
+
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              `nav-link ${isActive ? "active" : ""}`
+            }
+          >
+            New Request
+          </NavLink>
+
+          <NavLink
+            to="/requests"
+            className={({ isActive }) =>
+              `nav-link ${isActive ? "active" : ""}`
+            }
+          >
+            My Requests
+          </NavLink>
+
+        </nav>
 
         <div className="status">
           <span className="status-dot"></span>
           Online
         </div>
+
       </header>
 
       {/* ======================================

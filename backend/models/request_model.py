@@ -1,45 +1,95 @@
 from datetime import datetime
-from typing import Optional
 
-from pydantic import BaseModel
+from sqlmodel import Field, SQLModel
 
 from constants.status import RequestStatus
 
 
-class RequestModel(BaseModel):
+class RequestModel(SQLModel, table=True):
 
+    id: int | None = Field(
+        default=None,
+        primary_key=True
+    )
+
+    # ============================================
     # Requestor
+    # ============================================
+
     requestor_id: int
+
     requestor_email: str
+
     created_at: datetime
+
     requestor_message: str
 
-    # Request
-    tracking_id: str
+    clarified_requestor_message: str | None = None
+
+    # ============================================
+    # Tracking
+    # ============================================
+
+    tracking_id: str = Field(
+        index=True,
+        unique=True
+    )
+
+    # ============================================
+    # Request Status
+    # ============================================
+
     status: RequestStatus
 
+    # ============================================
     # Department
+    # ============================================
+
     department_id: int
+
     department_name: str
 
+    # ============================================
     # Approver
+    # ============================================
+
     approver_employee_id: int
+
     approver_name: str
+
     approver_email: str
 
+    # ============================================
     # Senior Manager
-    senior_manager_employee_id: Optional[int] = None
-    senior_manager_name: Optional[str] = None
-    senior_manager_email: Optional[str] = None
+    # ============================================
 
+    senior_manager_employee_id: int | None = None
+
+    senior_manager_name: str | None = None
+
+    senior_manager_email: str | None = None
+
+    # ============================================
     # Clarification
+    # ============================================
+
     need_clarification: bool
-    clarifications_required: Optional[list[str]] = None
-    clarified_requestor_message: Optional[str] = None
 
+    clarifications_required: str | None = None
+
+    # ============================================
     # Priority
-    priority: Optional[str] = None
+    # ============================================
 
+    priority: str | None = None
+
+    average_probability: float | None = None
+
+    # ============================================
     # Approval
-    approved_by: Optional[int] = None
-    approved_at: Optional[datetime] = None
+    # ============================================
+
+    approved_by: int | None = None
+
+    approved_at: datetime | None = None
+    approver_message: str | None = None

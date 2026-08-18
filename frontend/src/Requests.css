@@ -1,0 +1,501 @@
+/* ==========================================
+   Container
+========================================== */
+
+.requests-container {
+  width: 100%;
+  min-height: 100%;
+  padding: 10px 32px;
+  background: #f5f7fa;
+  color: #1f2937;
+}
+
+
+
+/* ==========================================
+   Request List
+========================================== */
+
+.requests-list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  width: 100%;
+
+  gap: 12px;
+}
+
+
+/* ==========================================
+   Request Card
+========================================== */
+
+.request-card {
+  width: 100%;
+
+  background: #ffffff;
+
+  border-radius: 10px;
+
+  overflow: hidden;
+
+  transition:
+    box-shadow 0.15s ease,
+    background 0.15s ease;
+}
+
+.request-card:hover {
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+.request-card.expanded {
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+
+/* ==========================================
+   Request Summary
+========================================== */
+
+.request-summary {
+  min-height: 76px;
+
+  padding: 16px 20px;
+
+  display: grid;
+
+  grid-template-columns:
+    1.5fr
+    1fr
+    1fr
+    40px;
+
+  align-items: center;
+
+  gap: 20px;
+
+  cursor: pointer;
+
+  user-select: none;
+}
+
+
+/* ==========================================
+   Summary Labels
+========================================== */
+
+.request-label {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #6b7280;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+
+/* ==========================================
+   Tracking ID
+========================================== */
+
+.tracking-id {
+  display: block;
+
+  color: #111827;
+
+  font-family: monospace;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+
+/* ==========================================
+   Priority Badge
+========================================== */
+
+.priority-badge {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: fit-content;
+
+  padding: 5px 11px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+
+/* Low */
+
+.priority-badge.low {
+  background: #dcfce7;
+
+  color: #166534;
+}
+
+
+/* Medium */
+
+.priority-badge.medium {
+  background: #fef3c7;
+
+  color: #92400e;
+}
+
+
+/* High */
+
+.priority-badge.high {
+  background: #fee2e2;
+
+  color: #991b1b;
+}
+
+
+/* ==========================================
+   Status Badge
+========================================== */
+
+.status-badge {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: fit-content;
+
+  padding: 5px 11px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+
+/* Approval Pending */
+
+.status-badge.approval_pending {
+  background: #fef3c7;
+
+  color: #92400e;
+}
+
+
+/* Approved */
+
+.status-badge.approved {
+  background: #dcfce7;
+
+  color: #166534;
+}
+
+
+/* Rejected */
+
+.status-badge.rejected {
+  background: #fee2e2;
+
+  color: #991b1b;
+}
+
+
+/* ==========================================
+   Expand Icon
+========================================== */
+
+.expand-icon {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  color: #6b7280;
+
+  font-size: 20px;
+  font-weight: 400;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.request-summary:hover .expand-icon {
+  background: #f3f4f6;
+
+  color: #111827;
+}
+
+
+/* ==========================================
+   Request Details
+========================================== */
+
+.request-details {
+  padding: 24px;
+
+  background: #ffffff;
+}
+
+
+/* Main details heading */
+
+.request-details > h3 {
+  margin: 0 0 20px;
+
+  color: #111827;
+
+  font-size: 18px;
+  font-weight: 700;
+}
+
+
+/* ==========================================
+   Detail Sections
+========================================== */
+
+.request-details section {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 1px;
+
+  margin-bottom: 24px;
+
+  background: #e5e7eb;
+
+  border-radius: 8px;
+
+  overflow: hidden;
+}
+
+.request-details section:last-child {
+  margin-bottom: 0;
+}
+
+
+/* Section heading */
+
+.request-details section h4 {
+  grid-column: 1 / -1;
+
+  margin: 0;
+
+  padding: 12px 14px;
+
+  background: #f9fafb;
+
+  color: #374151;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+
+/* ==========================================
+   Individual Detail
+========================================== */
+
+.request-detail {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 5px;
+
+  min-width: 0;
+
+  padding: 13px 14px;
+
+  background: #ffffff;
+}
+
+
+/* Full width detail */
+
+.request-detail.full-width {
+  grid-column: 1 / -1;
+}
+
+
+/* ==========================================
+   Detail Label
+========================================== */
+
+.request-detail-label {
+  color: #6b7280;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+
+/* ==========================================
+   Detail Value
+========================================== */
+
+.request-detail-value {
+  color: #1f2937;
+
+  font-size: 14px;
+  line-height: 1.5;
+
+  word-break: break-word;
+}
+
+
+/* ==========================================
+   Long Text
+========================================== */
+
+.request-detail.full-width
+.request-detail-value {
+  white-space: pre-wrap;
+}
+
+
+/* ==========================================
+   Loading
+========================================== */
+
+.requests-loading {
+  width: 100%;
+
+  padding: 48px 24px;
+
+  background: #ffffff;
+
+  border-radius: 10px;
+
+  color: #6b7280;
+
+  text-align: center;
+
+  font-size: 14px;
+}
+
+
+/* ==========================================
+   Error
+========================================== */
+
+.requests-error {
+  width: 100%;
+
+  padding: 20px;
+
+  background: #fef2f2;
+
+  border-radius: 10px;
+
+  color: #991b1b;
+
+  text-align: center;
+
+  font-size: 14px;
+}
+
+
+/* ==========================================
+   Empty
+========================================== */
+
+.requests-empty {
+  width: 100%;
+
+  padding: 48px 24px;
+
+  background: #ffffff;
+
+  border-radius: 10px;
+
+  color: #6b7280;
+
+  text-align: center;
+
+  font-size: 14px;
+}
+
+
+/* ==========================================
+   Responsive
+========================================== */
+
+@media (max-width: 700px) {
+
+  .requests-container {
+    padding: 0px 16px;
+  }
+
+  .requests-header h2 {
+    font-size: 21px;
+  }
+
+  .request-summary {
+    grid-template-columns:
+      1fr
+      1fr
+      32px;
+
+    gap: 12px;
+
+    padding: 16px;
+  }
+
+  .request-summary > div:nth-child(1) {
+    grid-column: 1 / 3;
+  }
+
+  .request-summary > div:nth-child(2) {
+    grid-column: 1;
+  }
+
+  .request-summary > div:nth-child(3) {
+    grid-column: 2;
+  }
+
+  .expand-icon {
+    grid-column: 3;
+    grid-row: 1 / 3;
+  }
+
+  .request-details {
+    padding: 16px;
+  }
+
+  .request-details section {
+    grid-template-columns: 1fr;
+  }
+
+  .request-details section h4 {
+    grid-column: auto;
+  }
+
+  .request-detail.full-width {
+    grid-column: auto;
+  }
+}

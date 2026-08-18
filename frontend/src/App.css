@@ -146,14 +146,14 @@ body {
 .bot-message {
   background: #f3f4f6;
   color: #1f2937;
-
+  text-align: left;
   border-top-left-radius: 4px;
 }
 
 .user-message {
   background: #111827;
   color: white;
-
+  text-align: left;
   border-top-right-radius: 4px;
 }
 
@@ -229,9 +229,9 @@ body {
 
 textarea {
   flex: 1;
-
+  background-color: white;
   resize: none;
-
+  color: #374151;
   border: none;
   outline: none;
 
@@ -291,6 +291,9 @@ textarea::placeholder {
 .clarification-box {
   width: 100%;
   max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
 }
 
 .clarification-status {
@@ -320,6 +323,8 @@ textarea::placeholder {
   border-radius: 8px;
   font-size: 14px;
   outline: none;
+  background-color: #fff;
+  color:#374151;
 }
 
 .clarification-question input:focus {
@@ -342,6 +347,48 @@ textarea::placeholder {
   cursor: not-allowed;
 }
 
+/* ==========================================
+   Navigation
+========================================== */
+
+.nav-links {
+  display: flex;
+  align-items: center;
+
+  margin-left: 40px;
+
+  gap: 8px;
+}
+
+.nav-link {
+  padding: 8px 14px;
+
+  color: #6b7280;
+
+  text-decoration: none;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  border-radius: 6px;
+
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.nav-link:hover {
+  color: #111827;
+  background: #f3f4f6;
+}
+
+.nav-link.active {
+  color: #111827;
+  background: #f3f4f6;
+
+  font-weight: 600;
+}
+
 /* =========================
    Mobile
 ========================= */
@@ -361,5 +408,15 @@ textarea::placeholder {
 
   .input-area {
     padding: 8px 12px 14px;
+  }
+
+  .nav-links {
+    margin-left: 16px;
+    gap: 2px;
+  }
+
+  .nav-link {
+    padding: 7px 9px;
+    font-size: 13px;
   }
 }
