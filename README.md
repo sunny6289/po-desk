@@ -1,110 +1,254 @@
-# PO Desk - Setup & Local Development Guide
+# PO Desk
 
-This guide will help you run the **PO Desk** project on your local machine after cloning it from GitHub.
+PO Desk is an internal request-management system where employees can submit requests, receive clarification when required, and track their requests. Approvers can review requests, approve/reject them, and send a response to the requestor.
 
----
+## Prerequisites
 
-## 📋 Prerequisites
+Make sure you have the following installed:
 
-Before running the project, ensure you have the following installed on your computer:
+* **Python 3.10+**
+* **Node.js 18+**
+* **npm**
+* **Git**
 
-* **Node.js** (v18.0 or higher) & **npm** — [Download Node.js](https://nodejs.org/)
-* **Python** (v3.10 or higher) & **pip** — [Download Python](https://www.python.org/)
-* **Git** — [Download Git](https://git-scm.com/)
-
----
-
-## 🚀 Step-by-Step Setup Instructions
-
-### 1. Clone the Repository
-
-Open your terminal or command prompt and clone the project:
+## 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/po-desk.git
+git clone https://github.com/sunny6289/po-desk
 cd po-desk
 ```
 
 ---
 
-### 2. Set Up and Run the Backend (FastAPI)
+# 2. Setup the Backend
 
-1. Navigate to the `backend` folder:
-   ```bash
-   cd backend
-   ```
+Open a terminal in the project root and navigate to the backend:
 
-2. Create a Python Virtual Environment:
-   * **Windows:**
-     ```powershell
-     python -m venv venv
-     .\venv\Scripts\activate
-     ```
-   * **macOS / Linux:**
-     ```bash
-     python3 -m venv venv
-     source venv/bin/activate
-     ```
+```bash
+cd backend
+```
 
-3. Install required Python packages:
-   ```bash
-   pip install -r requirements.txt
-   ```
+### Create a Python virtual environment
 
-4. Create environment variables (`.env`):
-   Create a `.env` file inside the `backend/` directory and add your API keys:
-   ```env
-   GEMINI_API_KEY=your_gemini_api_key_here
-   ```
+**Windows:**
 
-5. Start the FastAPI server:
-   ```bash
-   uvicorn main:app --reload
-   ```
+```powershell
+python -m venv venv
+.\venv\Scripts\activate
+```
 
-The backend server will run at: **`http://localhost:8000`**  
-*(API documentation available at `http://localhost:8000/docs`)*
+**macOS / Linux:**
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### Create `.env`
+
+Create a file named `.env` inside the `backend` folder:
+
+```env
+GEMINI_API_KEY=your_gemini_api_key
+RESEND_API_KEY=your_resend_api_key
+RESEND_FROM_EMAIL=onboarding@resend.dev
+```
+
+> Do **not** commit the `.env` file. It is already included in the backend `.gitignore`.
+
+### Start the backend
+
+From the `backend` directory:
+
+```bash
+uvicorn main:app --reload
+```
+
+The FastAPI backend will run at:
+
+```text
+http://localhost:8000
+```
+
+API documentation is available at:
+
+```text
+http://localhost:8000/docs
+```
+
+The SQLite database will be created locally by the backend.
 
 ---
 
-### 3. Set Up and Run the Frontend (React)
+# 3. Setup the Requestor Frontend
 
-Open a **new terminal tab or window** (keep the backend running in the first terminal).
+Open a **new terminal** and navigate to the requestor frontend:
 
-1. Navigate to the `frontend` folder from the root directory:
-   ```bash
-   cd po-desk/frontend
-   ```
+```bash
+cd po-desk/frontend
+```
 
-2. Install JavaScript dependencies:
-   ```bash
-   npm install
-   ```
+Install dependencies:
 
-3. Start the React development server:
-   ```bash
-   npm start
-   # Or if using Vite:
-   # npm run dev
-   ```
+```bash
+npm install
+```
 
-The frontend application will open automatically in your web browser at: **`http://localhost:3000`** (or `http://localhost:5173` if using Vite).
+Start the Vite development server:
+
+```bash
+npm run dev
+```
+
+The requestor portal will be available at:
+
+```text
+http://localhost:5173
+```
+
+This frontend is used by employees to:
+
+* Submit requests
+* Answer clarification questions
+* Track previously submitted requests
+* View request status and details
 
 ---
 
-## 📁 Project Structure
+# 4. Setup the Approval Frontend
+
+Open another **new terminal** and navigate to the approval frontend:
+
+```bash
+cd po-desk/approval-frontend
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the Vite development server:
+
+```bash
+npm run dev
+```
+
+The approval portal will be available at:
+
+```text
+http://localhost:5174
+```
+
+This frontend is used by approvers to:
+
+* Select a department
+* View requests assigned to the department
+* Filter requests by status
+* View complete request details
+* Approve or reject requests
+* Provide an approval/rejection reason
+
+---
+
+# 5. Run the Complete Application
+
+You should have **three terminals** running:
+
+### Terminal 1 — Backend
+
+```powershell
+cd po-desk/backend
+.\venv\Scripts\activate
+uvicorn main:app --reload
+```
+
+Runs on:
+
+```text
+http://localhost:8000
+```
+
+### Terminal 2 — Requestor Frontend
+
+```powershell
+cd po-desk/frontend
+npm run dev
+```
+
+Runs on:
+
+```text
+http://localhost:5173
+```
+
+### Terminal 3 — Approval Frontend
+
+```powershell
+cd po-desk/approval-frontend
+npm run dev
+```
+
+Runs on:
+
+```text
+http://localhost:5174
+```
+
+---
+
+## Project Structure
 
 ```text
 po-desk/
 │
-├── backend/                # FastAPI application
-│   ├── main.py             # Server routes and entry point
-│   ├── requirements.txt    # Python dependencies
-│   └── .env                # Backend environment variables (Not committed)
+├── backend/
+│   ├── agents/
+│   ├── constants/
+│   ├── database/
+│   ├── models/
+│   ├── utility/
+│   ├── main.py
+│   ├── requirements.txt
+│   ├── .env                  # Not committed
+│   └── .gitignore
 │
-├── frontend/               # ReactJS application
-│   ├── src/                # UI source code
-│   └── package.json        # Frontend dependencies & scripts
+├── frontend/                  # Requestor portal
+│   ├── src/
+│   ├── package.json
+│   └── ...
 │
-└── README.md               # Setup documentation
+├── approval-frontend/         # Approver portal
+│   ├── src/
+│   ├── package.json
+│   └── ...
+│
+└── README.md
 ```
+
+## Environment Variables
+
+The backend requires:
+
+| Variable            | Purpose                           |
+| ------------------- | --------------------------------- |
+| `GEMINI_API_KEY`    | Used by the AI agents             |
+| `RESEND_API_KEY`    | Used for sending emails           |
+| `RESEND_FROM_EMAIL` | Email address used to send emails |
+
+Example:
+
+```env
+GEMINI_API_KEY=your_gemini_api_key
+RESEND_API_KEY=your_resend_api_key
+RESEND_FROM_EMAIL=onboarding@resend.dev
+```
+
+**Never commit your API keys or `.env` file to GitHub.**
