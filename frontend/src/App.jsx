@@ -9,6 +9,7 @@ const API = {
 };
 
 const REQUESTOR_EMPLOYEE_ID= 2436587;
+const REQUESTOR_EMPLOYEE_EMAIL_ID= "sunnymishra9007689708@gmail.com";
 
 function App() {
   const [messages, setMessages] = useState([
@@ -53,7 +54,7 @@ function App() {
     try {
       const requestData = {
         employee_id: REQUESTOR_EMPLOYEE_ID,
-        employee_email: "sunnymishra9007689708@gmail.com",
+        employee_email: REQUESTOR_EMPLOYEE_EMAIL_ID,
         created_at: new Date().toISOString(),
         message: text,
       };
