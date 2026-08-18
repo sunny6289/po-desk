@@ -134,7 +134,7 @@ Status: ${data.status}
           {
             id: Date.now() + 1,
             sender: "bot",
-            text: data.message,
+            text: data.server_message,
           },
         ]);
       }
