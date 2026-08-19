@@ -1,5 +1,8 @@
-from datetime import datetime
+from datetime import datetime, timedelta
+import asyncio
+from contextlib import asynccontextmanager
 
+from services.escalation_service import process_escalations
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -24,11 +27,55 @@ from database.database import (
 from models.request_model import RequestModel
 
 
+async def escalation_loop():
+
+    while True:
+
+        try:
+
+            process_escalations()
+
+        except Exception as e:
+
+            print(
+                "Escalation loop error:",
+                e
+            )
+
+        await asyncio.sleep(1)
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+
+    task = asyncio.create_task(
+        escalation_loop()
+    )
+
+    try:
+
+        yield
+
+    finally:
+
+        task.cancel()
+
+        try:
+
+            await task
+
+        except asyncio.CancelledError:
+
+            pass
+
+
 # ============================================
 # FastAPI Application
 # ============================================
 
-app = FastAPI()
+app = FastAPI(
+    lifespan=lifespan
+)
 
 
 # ============================================
@@ -107,7 +154,6 @@ class DepartmentRequest(BaseModel):
 # ============================================
 
 create_db_and_tables()
-
 
 # ============================================
 # Home
@@ -227,7 +273,12 @@ def submit_clarifications(
         request_record.need_clarification = False
 
         request_record.clarifications_required = None
+        request_record.reply_within = prioritization_result["reply_within"]
 
+        request_record.reply_deadline = (
+            datetime.now()
+            + timedelta(seconds=prioritization_result["reply_within"])
+        )
         request_record.priority = (
             prioritization_result["priority"]
         )

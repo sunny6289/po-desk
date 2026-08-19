@@ -274,12 +274,31 @@ all {len(metrics)} metrics.
 
 
     # ========================================
+    # Determine Reply Within
+    # ========================================
+
+    if priority == "LOW":
+
+        reply_within = 30
+
+    elif priority == "MEDIUM":
+
+        reply_within = 20
+
+    else:
+
+        reply_within = 10
+
+
+    # ========================================
     # Build Response
     # ========================================
 
     return {
         "success": True,
+
         "department_name": department_name,
+
         "metrics": [
             {
                 "metric": metric.metric,
@@ -287,9 +306,13 @@ all {len(metrics)} metrics.
             }
             for metric in returned_metrics
         ],
+
         "average_probability": round(
             average_probability,
             2
         ),
-        "priority": priority
+
+        "priority": priority,
+
+        "reply_within": reply_within
     }

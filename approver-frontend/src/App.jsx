@@ -383,6 +383,8 @@ function App() {
         `Request ${status.toLowerCase()} successfully.`
       );
 
+      location.reload();
+
 
     } catch (error) {
 
@@ -563,7 +565,7 @@ function App() {
 
                 const isApprovalPending =
                   request.status ===
-                  "APPROVAL_PENDING";
+                  "APPROVAL_PENDING" || "ESCALATED";
 
                 const selectedApprovalStatus =
                   approvalStatus[

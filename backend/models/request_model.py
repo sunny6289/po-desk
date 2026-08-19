@@ -93,3 +93,5 @@ class RequestModel(SQLModel, table=True):
 
     approved_at: datetime | None = None
     approver_message: str | None = None
+    reply_within: int | None = None
+    reply_deadline: datetime | None = None

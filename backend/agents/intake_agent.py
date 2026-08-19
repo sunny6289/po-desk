@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from google import genai
 from pydantic import BaseModel
 from sqlmodel import Session, select
+from datetime import datetime, timedelta
 
 from agents.clarification_agent import clarification_agent
 from agents.prioritization_agent import prioritization_agent
@@ -247,7 +248,9 @@ Employee message:
 
         approved_by=None,
         approved_at=None,
-        approver_message=None
+        approver_message=None,
+        reply_within=None,
+        reply_deadline=None
     )
 
     # ============================================
@@ -450,6 +453,7 @@ Employee message:
     )
 
     priority = prioritization_result["priority"]
+    reply_within = prioritization_result["reply_within"]
 
     # ============================================
     # Update DB
@@ -478,7 +482,12 @@ Employee message:
             )
 
             request_record.priority = priority
+            request_record.reply_within = reply_within
 
+            request_record.reply_deadline = (
+                datetime.now()
+                + timedelta(seconds=reply_within)
+            )
             session.add(request_record)
             session.commit()
 
