@@ -563,9 +563,8 @@ function App() {
                   expandedRequest ===
                   request.id;
 
-                const isApprovalPending =
-                  request.status ===
-                  "APPROVAL_PENDING" || "ESCALATED";
+                const isApprovalPending =request.status === "APPROVAL_PENDING" || 
+                request.status === "ESCALATED";
 
                 const selectedApprovalStatus =
                   approvalStatus[
